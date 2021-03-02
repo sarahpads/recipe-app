@@ -1,0 +1,3 @@
+mutation Favourite($recipeId: String!) {
+  favourite(id: $recipeId) { id, isFavourite }
+}

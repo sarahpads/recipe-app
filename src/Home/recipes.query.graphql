@@ -1,0 +1,3 @@
+query Recipes {
+  recipes { id, title, image, duration, description, isFavourite }
+}
