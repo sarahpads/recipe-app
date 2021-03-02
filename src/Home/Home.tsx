@@ -1,37 +1,32 @@
 import React from "react"
-import { gql } from "graphql-tag"
-import { useQuery } from "@apollo/client"
 import RecipeCard from "../Recipe/RecipeCard/RecipeCard"
-
-const query = gql`
-  query {
-    recipes {
-      id, title, image, duration, description, isFavourite
-    }
-  }
-`
+import { useRecipesQuery } from "../graphql"
 
 const Home: React.FC = () => {
-  const { data, loading, error } = useQuery(query)
-
-  if (loading) {
-    return <div>Loading</div>
-  }
+  const { data, loading, error } = useRecipesQuery()
 
   if (error) {
     return <div>Error</div>
   }
 
-  return data.recipes.map((recipe: any) => (
-    <RecipeCard
-      id={recipe.id}
-      title={recipe.title}
-      image={recipe.image}
-      duration={recipe.duration}
-      description={recipe.description}
-      isFavourite={recipe.isFavourite}
-    />
-  ))
+  if (loading || !data) {
+    return <div>Loading</div>
+  }
+
+  return (
+    <React.Fragment>
+      {data.recipes.map((recipe) => (
+        <RecipeCard
+          id={recipe.id}
+          title={recipe.title}
+          image={recipe.image}
+          duration={recipe.duration}
+          description={recipe.description}
+          isFavourite={recipe.isFavourite}
+        />
+      ))}
+    </React.Fragment>
+  )
 }
 
 export default Home

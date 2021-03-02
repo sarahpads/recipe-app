@@ -4,8 +4,8 @@ import { Rating } from "@material-ui/lab"
 import ShareIcon from "@material-ui/icons/Share"
 import BookmarkIcon from "@material-ui/icons/Bookmark"
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder"
-import { gql } from "graphql-tag"
-import { useMutation } from "@apollo/client"
+
+import { useFavouriteMutation, useUnfavouriteMutation } from "../../graphql"
 
 interface RecipeCardProps {
   id: string
@@ -30,22 +30,10 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const favouriteQuery = gql`
-  mutation Favourite($recipeId: String!) {
-    favourite(id: $recipeId) { id, isFavourite }
-  }
-`
-
-const unfavouriteQuery = gql`
-  mutation Unfavourite($recipeId: String!) {
-    unfavourite(id: $recipeId) { id, isFavourite }
-  }
-`
-
 const RecipeCard: React.FC<RecipeCardProps> = (props) => {
   const classes = useStyles()
-  const [favourite] = useMutation(favouriteQuery)
-  const [unfavourite] = useMutation(unfavouriteQuery)
+  const [favourite] = useFavouriteMutation()
+  const [unfavourite] = useUnfavouriteMutation()
 
   function onBookmarkClick() {
     if (!props.isFavourite) {
