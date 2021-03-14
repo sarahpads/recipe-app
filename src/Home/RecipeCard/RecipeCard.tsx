@@ -6,6 +6,7 @@ import BookmarkIcon from "@material-ui/icons/Bookmark"
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder"
 
 import { useFavouriteMutation, useUnfavouriteMutation } from "../../graphql"
+import { useAuth0 } from "@auth0/auth0-react"
 
 interface RecipeCardProps {
   id: string
@@ -31,6 +32,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const RecipeCard: React.FC<RecipeCardProps> = (props) => {
+  const { isAuthenticated } = useAuth0()
   const classes = useStyles()
   const [favourite] = useFavouriteMutation()
   const [unfavourite] = useUnfavouriteMutation()
@@ -61,9 +63,11 @@ const RecipeCard: React.FC<RecipeCardProps> = (props) => {
       </CardContent>
 
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites" onClick={onBookmarkClick}>
-          {props.isFavourite ? <BookmarkIcon/> : <BookmarkBorderIcon />}
-        </IconButton>
+        {isAuthenticated && (
+          <IconButton aria-label="add to favorites" onClick={onBookmarkClick}>
+            {props.isFavourite ? <BookmarkIcon/> : <BookmarkBorderIcon />}
+          </IconButton>
+        )}
 
         <IconButton aria-label="share">
           <ShareIcon />
